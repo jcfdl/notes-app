@@ -18,8 +18,10 @@ class CreateNotesTable extends Migration
             $table->foreignId('user_id')->constrained();
             $table->string('title', 255);
             $table->longText('body');
-            $table->foreign('updated_by')->references('id')->on('users');
+            $table->unsignedBigInteger('updated_by');
             $table->timestamps();
+            
+            $table->foreign('updated_by')->references('id')->on('users');
         });
     }
 
