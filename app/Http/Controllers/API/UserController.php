@@ -59,21 +59,31 @@ class UserController extends Controller
         return response()->json($data);
     }
     
-    public function logout() {
-        try {
-            Session::flush();
-            $success = true;
-            $message = 'Successfully logged out';
-        } catch (\Illuminate\Database\QueryException $ex) {
-            $success = false;
-            $message = $ex->getMessage();
-        }
+  public function logout() {
+      try {
+          Session::flush();
+          $success = true;
+          $message = 'Successfully logged out';
+      } catch (\Illuminate\Database\QueryException $ex) {
+          $success = false;
+          $message = $ex->getMessage();
+      }
 
-        // response
-        $response = [
-            'response' => $success,
-            'message' => $message,
-        ];
-        return response()->json($response);
-    }
+      // response
+      $data = [
+          'response' => $success,
+          'message' => $message,
+      ];
+      return response()->json($data);
+  }
+  
+  public function list() {
+    $users = User::all()->toArray();
+    
+    $data = [
+        'response' => true,
+        'data' => $users,
+    ];
+    return response()->json($data);
+  }
 }

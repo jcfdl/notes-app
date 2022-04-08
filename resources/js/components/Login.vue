@@ -54,25 +54,23 @@ export default {
   },
   methods: {
     handleSubmit(e) {
-      let { user, $router } = this
+      let { user, $router, validateLogin } = this
       e.preventDefault()
-      if (user.password && user.email) {
-        this.isProcessing = true
-        axios.get('sanctum/csrf-cookie').then(response => {
-          axios.post('api/login', user)
-          .then(response => {
-              if (response.data.response) {
-                  window.location.href = '/'
-              } else {
-                  this.error = response.data.message
-              }
-          })
-          .catch(function (error) {
-              console.error(error);
-          });
+      this.isProcessing = true
+      axios.get('sanctum/csrf-cookie').then(response => {
+        axios.post('api/login', user)
+        .then(response => {
+            if (response.data.response) {
+                window.location.href = '/'
+            } else {
+                this.error = response.data.message
+            }
         })
-        this.isProcessing = false
-      }
+        .catch(function (error) {
+            console.error(error);
+        });
+      })
+      this.isProcessing = false
     },
   },
   beforeRouteEnter(to, from, next) {

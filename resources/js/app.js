@@ -7,7 +7,6 @@ import VueAxios from 'vue-axios';
 
 import axios from 'axios';
 import { routes } from './routes';
-import store from './store'
 import App from './components/App'
  
 Vue.use(VueRouter);
@@ -21,7 +20,6 @@ const router = new VueRouter({
 const app = new Vue({
     el: '#app',
     router: router,
-    store: store,
     render: h => h(App),
 });
 

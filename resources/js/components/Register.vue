@@ -5,8 +5,10 @@
               <div class="card">
                   <div class="card-header">Register</div>
                   <div class="card-body">
-                    <div class="alert alert-danger mt-2" role="alert" v-if="error">
-                        {{ error }}
+                    <div class="alert alert-danger mt-2" role="alert" v-if="error.length">
+                        <ul>
+                          <li v-for="(err, index) in error" :key="index">{{err}}</li>
+                        </ul>
                     </div>
                       <form>
                           <div class="row mb-3">
@@ -67,14 +69,15 @@ export default {
         password_confirmation: ""
       },
       isProcessing: false,
-      error: ""
+      error: []
     }
   },
   methods: {
     handleSubmit(e) {
       e.preventDefault()
-      let { user, $router } = this
-      if (user.email && user.name && user.password) {
+      let { user, $router, validateRegistration } = this
+      this.isProcessing = true
+      if (validateRegistration()) {
           axios.get('/sanctum/csrf-cookie').then(response => {
               axios.post('api/register', 
               user)
@@ -82,7 +85,8 @@ export default {
                   if (response.data.response) {
                       $router.push("/login")
                   } else {
-                      this.error = response.data.message
+                      this.error = []
+                      this.error.push(response.data.message)
                   }
               })
               .catch(function (error) {
@@ -90,6 +94,41 @@ export default {
               });
           })
       }
+      this.isProcessing = false
+    },
+    validateRegistration() {
+      let { user } = this
+      this.error = []
+      
+      if (user.name == "") {
+        this.error.push("Name field is required.")
+      }
+      
+      if (user.email == "") {
+        this.error.push("Email field is required.")
+      }
+      else if (!(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(user.email))) {
+        this.error.push("Email address field is invalid.")
+      }
+      
+      
+      if (user.password == "") {
+        this.error.push("Password field is required.")
+      }
+      else if (user.password.length < 6) {
+        this.error.push("Your password should be more than or equal to 6 characters.")
+      }
+      else if (user.password_confirmation == "") {
+        this.error.push("You should confirm your password.")
+      }
+      else if (user.password != user.password_confirmation) {
+        this.error.push("Password does not match.")
+      }
+      
+      if (this.error.length)
+        return false
+      else
+        return true    
     }
   },
   beforeRouteEnter(to, from, next) {

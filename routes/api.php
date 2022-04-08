@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\NotesController;
+use App\Http\Controllers\API\UploadsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,4 +31,15 @@ Route::group(['prefix' => 'notes', 'middleware' => 'auth:sanctum'], function () 
     Route::get('edit/{id}', [NotesController::class, 'edit']);
     Route::post('update/{id}', [NotesController::class, 'update']);
     Route::delete('delete/{id}', [NotesController::class, 'delete']);
+    Route::post('shared/users/list', [NotesController::class, 'sharedNoteUserList']);
+    Route::get('shared/list', [NotesController::class, 'sharedNotesList']);
 });
+
+Route::group(['prefix' => 'users', 'middleware' => 'auth:sanctum'], function () {
+  Route::get('list', [UserController::class, 'list']);
+});
+
+Route::group(['prefix' => 'uploads', 'middleware' => 'auth:sanctum'], function () {
+  Route::post('file', [UploadsController::class, 'fileUpload']);
+});
+

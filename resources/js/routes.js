@@ -1,4 +1,5 @@
 import Notes from './components/Notes';
+import SharedNotes from './components/SharedNotes';
 import Login from './components/Login';
 import Register from './components/Register';
 
@@ -21,6 +22,11 @@ export const routes = [
         name: 'notes',
         path: '/',
         component: Notes
+    },
+    {
+        name: 'sharedNotes',
+        path: '/shared-notes',
+        component: SharedNotes
     },
     {
         name: 'addNote',

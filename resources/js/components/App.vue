@@ -11,7 +11,7 @@
               <div class="navbar-nav">
                   <template v-if="isLoggedIn">
                     <router-link to="/" class="nav-item nav-link">My Notes</router-link>
-                    <router-link to="/notes" class="nav-item nav-link">Shared Notes</router-link>
+                    <router-link to="/shared-notes" class="nav-item nav-link">Shared Notes</router-link>
                     <a class="nav-item nav-link" style="cursor: pointer;" @click="logout">Logout</a>
                   </template>
                   <template v-else>

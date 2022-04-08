@@ -2,10 +2,7 @@
     <div class="container">
       <div class="row mb-2">
         <div class="col-md-6">
-          <h3>My Notes</h3>
-        </div>
-        <div class="col-md-6 text-end">
-          <router-link to="/add-note" class="btn btn-primary">Add Note</router-link>
+          <h3>My Shared Notes</h3>
         </div>
       </div>
       <div class="alert alert-danger my-2" role="alert" v-if="error">
@@ -34,7 +31,6 @@
                   <div class="btn-group" role="group">
                       <router-link :to="{name: 'editNote', params: { id: note.id }}" class="btn btn-primary">Edit
                       </router-link>
-                      <button class="btn btn-danger" @click="deletePost(note.id)">Delete</button>
                   </div>
               </td>
           </tr>
@@ -53,13 +49,17 @@ export default {
         }
     },
     created() {
-      this.axios
-        .get('/api/notes')
+      axios.get('/sanctum/csrf-cookie').then(response => {
+        this.getNotes()
+      })
+    },
+    methods: {
+      getNotes() {
+        axios.get('/api/notes/shared/list')
         .then(response => {
             this.notes = response.data.data;
         });
-    },
-    methods: {
+      },
       deletePost(id) {
         this.axios
         .delete(`/api/notes/delete/${id}`)
